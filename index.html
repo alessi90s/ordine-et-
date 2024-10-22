@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ordinatore di Età</title>
+</head>
+<body>
+    <h1>Ordinatore di Età</h1>
+    <textarea id="inputText" rows="20" cols="80" placeholder="Inserisci il testo qui..."></textarea><br><br>
+    <button onclick="sortText()">Ordina per Età</button>
+    <h2>Testo Ordinato</h2>
+    <textarea id="outputText" rows="20" cols="80" readonly></textarea>
+    <script>
+        function sortText() {
+            var inputText = document.getElementById("inputText").value;
+            var blocks = [];
+            var regex = /(Età\s*\d+.*?)(?=Età\s*\d+|$)/gs;
+            var match;
+            while ((match = regex.exec(inputText)) !== null) {
+                var block = match[1];
+                // Estrae il numero dopo "Età"
+                var ageMatch = /Età\s*(\d+)/.exec(block);
+                var age = ageMatch ? parseInt(ageMatch[1]) : null;
+                blocks.push({age: age, text: block});
+            }
+            // Ordina i blocchi in base all'età
+            blocks.sort(function(a, b) {
+                return a.age - b.age;
+            });
+            // Combina i blocchi ordinati
+            var outputText = blocks.map(function(block) {
+                return block.text.trim();
+            }).join("\n\n");
+            // Mostra il testo ordinato
+            document.getElementById("outputText").value = outputText;
+        }
+    </script>
+</body>
+</html>
