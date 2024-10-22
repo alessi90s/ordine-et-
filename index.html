@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ordinatore di Età Avanzato</title>
+    <title>Ordinatore di Età Semplificato</title>
 </head>
 <body>
-    <h1>Ordinatore di Età Avanzato</h1>
+    <h1>Ordinatore di Età Semplificato</h1>
     <textarea id="inputText" rows="20" cols="80" placeholder="Inserisci il testo qui..."></textarea><br><br>
     <button onclick="sortText()">Ordina per Età</button>
     <h2>Testo Ordinato</h2>
@@ -34,18 +34,14 @@
         }
 
         function extractAge(text) {
-            // Cerca tutti i numeri nel testo dopo "Età"
-            var numbers = [];
-            var ageText = text.substring(text.indexOf('Età') + 3); // Prende il testo dopo "Età"
-            var numberMatches = ageText.match(/\d+/g);
-            if (numberMatches) {
-                numbers = numberMatches.map(Number);
-                // Calcola la media dei numeri trovati
-                var sum = numbers.reduce((a, b) => a + b, 0);
-                var average = sum / numbers.length;
-                return average;
+            // Prende il testo dopo "Età"
+            var ageText = text.substring(text.indexOf('Età') + 3);
+            // Trova il primo numero di una o due cifre
+            var ageMatch = ageText.match(/\b(\d{1,2})\b/);
+            if (ageMatch) {
+                return parseInt(ageMatch[1]);
             } else {
-                // Se non trova numeri, assegna Infinity per posizionarlo alla fine
+                // Se non trova un numero valido, assegna Infinity per posizionarlo alla fine
                 return Infinity;
             }
         }
