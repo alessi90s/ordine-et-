@@ -34,40 +34,20 @@
         }
 
         function extractAge(text) {
-            var age = null;
-
-            // Pattern per "Età circa X anni"
-            var approxAgeMatch = /Età\s*circa\s*(\d+)\s*(?:anni)?/i.exec(text);
-            if (approxAgeMatch) {
-                age = parseInt(approxAgeMatch[1]);
-                return age;
+            // Cerca tutti i numeri nel testo dopo "Età"
+            var numbers = [];
+            var ageText = text.substring(text.indexOf('Età') + 3); // Prende il testo dopo "Età"
+            var numberMatches = ageText.match(/\d+/g);
+            if (numberMatches) {
+                numbers = numberMatches.map(Number);
+                // Calcola la media dei numeri trovati
+                var sum = numbers.reduce((a, b) => a + b, 0);
+                var average = sum / numbers.length;
+                return average;
+            } else {
+                // Se non trova numeri, assegna Infinity per posizionarlo alla fine
+                return Infinity;
             }
-
-            // Pattern per "Età tra i X e i Y anni"
-            var rangeAgeMatch = /Età\s*tra\s*i\s*(\d+)\s*(?:anni)?\s*e\s*i\s*(\d+)\s*anni/i.exec(text);
-            if (rangeAgeMatch) {
-                var age1 = parseInt(rangeAgeMatch[1]);
-                var age2 = parseInt(rangeAgeMatch[2]);
-                age = (age1 + age2) / 2; // Prende la media delle due età
-                return age;
-            }
-
-            // Pattern per "Età X anni"
-            var ageMatch = /Età\s*(\d+)\s*anni/i.exec(text);
-            if (ageMatch) {
-                age = parseInt(ageMatch[1]);
-                return age;
-            }
-
-            // Pattern per "Età X"
-            var simpleAgeMatch = /Età\s*(\d+)/i.exec(text);
-            if (simpleAgeMatch) {
-                age = parseInt(simpleAgeMatch[1]);
-                return age;
-            }
-
-            // Se non trova un'età, assegna un valore alto per posizionarlo alla fine
-            return Infinity;
         }
     </script>
 </body>
