@@ -34,18 +34,17 @@
         }
 
         function extractAge(text) {
-            // Cerca espressioni come "Età circa 6 anni", "Età tra i 13 anni e i 14 anni", "Età 25"
             var age = null;
 
             // Pattern per "Età circa X anni"
-            var approxAgeMatch = /Età\s*circa\s*(\d+)\s*anni/i.exec(text);
+            var approxAgeMatch = /Età\s*circa\s*(\d+)\s*(?:anni)?/i.exec(text);
             if (approxAgeMatch) {
                 age = parseInt(approxAgeMatch[1]);
                 return age;
             }
 
-            // Pattern per "Età tra i X anni e i Y anni"
-            var rangeAgeMatch = /Età\s*tra\s*i\s*(\d+)\s*anni\s*e\s*i\s*(\d+)\s*anni/i.exec(text);
+            // Pattern per "Età tra i X e i Y anni"
+            var rangeAgeMatch = /Età\s*tra\s*i\s*(\d+)\s*(?:anni)?\s*e\s*i\s*(\d+)\s*anni/i.exec(text);
             if (rangeAgeMatch) {
                 var age1 = parseInt(rangeAgeMatch[1]);
                 var age2 = parseInt(rangeAgeMatch[2]);
