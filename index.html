@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ordinatore di Età</title>
+    <title>Ordinatore di Età Avanzato</title>
 </head>
 <body>
-    <h1>Ordinatore di Età</h1>
+    <h1>Ordinatore di Età Avanzato</h1>
     <textarea id="inputText" rows="20" cols="80" placeholder="Inserisci il testo qui..."></textarea><br><br>
     <button onclick="sortText()">Ordina per Età</button>
     <h2>Testo Ordinato</h2>
@@ -13,13 +13,12 @@
         function sortText() {
             var inputText = document.getElementById("inputText").value;
             var blocks = [];
-            var regex = /(Età\s*\d+.*?)(?=Età\s*\d+|$)/gs;
+            var regex = /(Età.*?)(?=Età|$)/gs;
             var match;
             while ((match = regex.exec(inputText)) !== null) {
                 var block = match[1];
-                // Estrae il numero dopo "Età"
-                var ageMatch = /Età\s*(\d+)/.exec(block);
-                var age = ageMatch ? parseInt(ageMatch[1]) : null;
+                // Estrae l'età dal blocco
+                var age = extractAge(block);
                 blocks.push({age: age, text: block});
             }
             // Ordina i blocchi in base all'età
@@ -32,6 +31,44 @@
             }).join("\n\n");
             // Mostra il testo ordinato
             document.getElementById("outputText").value = outputText;
+        }
+
+        function extractAge(text) {
+            // Cerca espressioni come "Età circa 6 anni", "Età tra i 13 anni e i 14 anni", "Età 25"
+            var age = null;
+
+            // Pattern per "Età circa X anni"
+            var approxAgeMatch = /Età\s*circa\s*(\d+)\s*anni/i.exec(text);
+            if (approxAgeMatch) {
+                age = parseInt(approxAgeMatch[1]);
+                return age;
+            }
+
+            // Pattern per "Età tra i X anni e i Y anni"
+            var rangeAgeMatch = /Età\s*tra\s*i\s*(\d+)\s*anni\s*e\s*i\s*(\d+)\s*anni/i.exec(text);
+            if (rangeAgeMatch) {
+                var age1 = parseInt(rangeAgeMatch[1]);
+                var age2 = parseInt(rangeAgeMatch[2]);
+                age = (age1 + age2) / 2; // Prende la media delle due età
+                return age;
+            }
+
+            // Pattern per "Età X anni"
+            var ageMatch = /Età\s*(\d+)\s*anni/i.exec(text);
+            if (ageMatch) {
+                age = parseInt(ageMatch[1]);
+                return age;
+            }
+
+            // Pattern per "Età X"
+            var simpleAgeMatch = /Età\s*(\d+)/i.exec(text);
+            if (simpleAgeMatch) {
+                age = parseInt(simpleAgeMatch[1]);
+                return age;
+            }
+
+            // Se non trova un'età, assegna un valore alto per posizionarlo alla fine
+            return Infinity;
         }
     </script>
 </body>
